@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLine | Premium Air Travel</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="ri-plane-fill"></i> SkyLine
+            </a>
+            <div class="nav-links">
+                <a href="#" class="active">Book</a>
+                <a href="#">Check-in</a>
+                <a href="#">My Trips</a>
+                <a href="#">Status</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-text">Sign In</button>
+                <button class="btn btn-primary">Join Club</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero & Search Section -->
+        <section id="hero-section" class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content container">
+                <h1 class="hero-title">Discover the World with <span class="highlight">Elegance</span></h1>
+                <p class="hero-subtitle">Experience premium travel to over 300 destinations worldwide.</p>
+
+                <div class="search-card">
+                    <div class="search-tabs">
+                        <button class="tab active">Round Trip</button>
+                        <button class="tab">One Way</button>
+                        <button class="tab">Multi-city</button>
+                    </div>
+
+                    <form id="flight-search-form" class="search-form">
+                        <div class="form-group location-group">
+                            <label><i class="ri-flight-takeoff-line"></i> From</label>
+                            <input type="text" id="origin" placeholder="City or Airport" value="New York (JFK)"
+                                required>
+                        </div>
+
+                        <button type="button" class="swap-btn" id="swap-locations">
+                            <i class="ri-arrow-left-right-line"></i>
+                        </button>
+
+                        <div class="form-group location-group">
+                            <label><i class="ri-flight-land-line"></i> To</label>
+                            <input type="text" id="destination" placeholder="City or Airport" value="London (LHR)"
+                                required>
+                        </div>
+
+                        <div class="form-group date-group">
+                            <label><i class="ri-calendar-line"></i> Departure</label>
+                            <input type="date" id="departure-date" required>
+                        </div>
+
+                        <div class="form-group date-group">
+                            <label><i class="ri-calendar-event-line"></i> Return</label>
+                            <input type="date" id="return-date">
+                        </div>
+
+                        <div class="form-group passenger-group">
+                            <label><i class="ri-user-line"></i> Travelers</label>
+                            <select id="passengers">
+                                <option value="1">1 Passenger</option>
+                                <option value="2">2 Passengers</option>
+                                <option value="3">3 Passengers</option>
+                                <option value="4+">4+ Passengers</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-search">
+                            Search Flights <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results Section (Hidden by default) -->
+        <section id="results-section" class="section container hidden">
+            <div class="section-header">
+                <h2>Select Your Flight</h2>
+                <button id="back-to-search" class="btn-text"><i class="ri-arrow-left-line"></i> Back to Search</button>
+            </div>
+
+            <div class="flight-filters">
+                <span><i class="ri-filter-3-line"></i> Filter:</span>
+                <button class="filter-chip active">Best Value</button>
+                <button class="filter-chip">Fastest</button>
+                <button class="filter-chip">Non-stop</button>
+            </div>
+
+            <div id="flight-list" class="flight-list">
+                <!-- Flight Items will be injected here -->
+            </div>
+        </section>
+
+        <!-- Booking Section (Hidden by default) -->
+        <section id="booking-section" class="section container hidden">
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2>Passenger Details</h2>
+                    <button id="back-to-results" class="btn-text"><i class="ri-arrow-left-line"></i> Back to
+                        Flights</button>
+                </div>
+
+                <div class="booking-grid">
+                    <div class="passenger-form-card">
+                        <h3>Who's traveling?</h3>
+                        <form id="booking-form">
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="first-name" required placeholder="e.g. John">
+                                </div>
+                                <div class="input-group">
+                                    <label>Last Name</label>
+                                    <input type="text" id="last-name" required placeholder="e.g. Doe">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Email Address</label>
+                                    <input type="email" id="email" required placeholder="john.doe@example.com">
+                                </div>
+                                <div class="input-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="phone" required placeholder="+1 (555) 000-0000">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label>Passport Number</label>
+                                    <input type="text" id="passport" required placeholder="X0000000">
+                                </div>
+                            </div>
+
+                            <h3>Payment Information</h3>
+                            <div class="credit-card-mock">
+                                <div class="card-icons">
+                                    <i class="ri-visa-line"></i> <i class="ri-mastercard-line"></i>
+                                </div>
+                                <div class="input-group full-width">
+                                    <label>Card Number</label>
+                                    <input type="text" placeholder="0000 0000 0000 0000">
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label>Expiry</label>
+                                        <input type="text" placeholder="MM/YY">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>CVV</label>
+                                        <input type="text" placeholder="123">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-large">
+                                Confirm & Pay <span id="total-price-display">$0.00</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="flight-summary-card">
+                        <h3>Trip Summary</h3>
+                        <div id="selected-flight-summary">
+                            <!-- Selected flight details injected here -->
+                        </div>
+                        <div class="price-breakdown">
+                            <div class="price-row"><span>Base Fare</span> <span>$450.00</span></div>
+                            <div class="price-row"><span>Taxes & Fees</span> <span>$85.00</span></div>
+                            <div class="price-total"><span>Total</span> <span id="summary-total">$535.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Confirmation Section (Hidden by default) -->
+        <section id="confirmation-section" class="section container hidden">
+            <div class="confirmation-card">
+                <div class="success-icon">
+                    <i class="ri-check-line"></i>
+                </div>
+                <h1>Booking Confirmed!</h1>
+                <p>Thank you for flying with SkyLine. Your booking reference is <strong
+                        id="booking-ref">#SKY8829</strong>.</p>
+                <p>A confirmation email has been sent to <span id="confirm-email">email@example.com</span>.</p>
+
+                <div class="confirmation-actions">
+                    <button class="btn btn-primary" onclick="location.reload()">Book Another Trip</button>
+                    <button class="btn btn-outline">View My Trips</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="ri-plane-fill"></i> SkyLine
+            </div>
+            <p>&copy; 2026 SkyLine Airways. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sign In Modal -->
+    <div id="signin-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Welcome Back</h2>
+            <form id="signin-form">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="name@example.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary btn-large">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Feature Coming Soon!</div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
