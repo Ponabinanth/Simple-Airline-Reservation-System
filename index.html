@@ -34,8 +34,8 @@
                 <a href="#">Status</a>
             </div>
             <div class="nav-actions">
-                <button class="btn-text">Sign In</button>
-                <button class="btn btn-primary">Join Club</button>
+                <button class="btn-text" id="nav-signin">Sign In</button>
+                <button class="btn btn-primary" id="nav-join">Join Club</button>
             </div>
         </div>
     </nav>
@@ -217,9 +217,72 @@
 
                 <div class="confirmation-actions">
                     <button class="btn btn-primary" onclick="location.reload()">Book Another Trip</button>
-                    <button class="btn btn-outline">View My Trips</button>
+                    <button class="btn btn-outline" id="view-booked-trips">View My Trips</button>
                 </div>
             </div>
+        </section>
+
+        <!-- Check-in Section -->
+        <section id="checkin-section" class="section container hidden">
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2>Online Check-in</h2>
+                </div>
+                <div class="passenger-form-card">
+                    <form id="checkin-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Booking Reference (PNR)</label>
+                                <input type="text" id="checkin-pnr" required placeholder="e.g. SKY4821">
+                            </div>
+                            <div class="input-group">
+                                <label>Last Name</label>
+                                <input type="text" id="checkin-lastname" required placeholder="e.g. Doe">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Check In</button>
+                    </form>
+                    <div id="checkin-result" class="hidden"
+                        style="margin-top:16px; border:1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flight Status Section -->
+        <section id="status-section" class="section container hidden">
+            <div class="booking-container">
+                <div class="booking-header">
+                    <h2>Flight Status</h2>
+                </div>
+                <div class="passenger-form-card">
+                    <form id="status-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Flight Number</label>
+                                <input type="text" id="status-flight-num" required placeholder="e.g. DL401">
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="status-date">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Track Flight</button>
+                    </form>
+                    <div id="status-result" class="hidden" style="margin-top:16px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Trips Section -->
+        <section id="mytrips-section" class="section container hidden">
+            <div class="section-header">
+                <h2>My Trips</h2>
+                <button class="btn-text" onclick="window.app.switchView('hero')">
+                    <i class="ri-arrow-left-line"></i> Book New Trip
+                </button>
+            </div>
+            <div id="mytrips-list" class="flight-list"></div>
         </section>
 
     </main>
@@ -236,7 +299,7 @@
     <!-- Sign In Modal -->
     <div id="signin-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" id="close-signin">&times;</span>
             <h2>Welcome Back</h2>
             <form id="signin-form">
                 <div class="input-group">
@@ -252,6 +315,25 @@
         </div>
     </div>
 
+    <!-- Join Club Modal -->
+    <div id="join-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="close-join">&times;</span>
+            <h2>Join SkyLine Club</h2>
+            <form id="join-form">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" required placeholder="Your name">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="name@example.com">
+                </div>
+                <button type="submit" class="btn btn-primary btn-large">Join Now</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden">Feature Coming Soon!</div>
 
@@ -259,3 +341,4 @@
 </body>
 
 </html>
+
