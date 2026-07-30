@@ -283,6 +283,19 @@ def book_service(req: GenericBookingRequest):
     BOOKINGS_DB[pnr] = booking
     return {"status": "SUCCESS", "booking": booking}
 
+# 12. Get All Bookings
+@app.get("/api/bookings")
+def get_all_bookings():
+    return {"status": "SUCCESS", "bookings": list(BOOKINGS_DB.values())}
+
+# 13. Cancel Booking
+@app.delete("/api/bookings/{pnr}")
+def cancel_booking(pnr: str):
+    if pnr in BOOKINGS_DB:
+        del BOOKINGS_DB[pnr]
+        return {"status": "SUCCESS", "message": f"Booking {pnr} cancelled successfully."}
+    raise HTTPException(status_code=404, detail="Booking not found.")
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
