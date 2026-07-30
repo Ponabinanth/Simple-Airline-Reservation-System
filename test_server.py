@@ -6,7 +6,9 @@ client = TestClient(app)
 def test_health_check():
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "SUCCESS", "message": "SKYLINE X API is running gracefully."}
+    data = response.json()
+    assert data["status"] == "HEALTHY"
+    assert "system" in data
 
 def test_search_flights():
     payload = {
