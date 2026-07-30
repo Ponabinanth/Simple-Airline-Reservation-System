@@ -73,17 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function bookService(type, name, fare, details) {
     try {
-      const res = await fetch(`${BACKEND_API}/book-service`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_type: type,
-          item_name: name,
-          total_fare: fare,
-          details: details
-        })
-      });
-      const data = await res.json();
+      const data = await window.api.bookService(type, name, fare, details);
       if (data.status === 'SUCCESS') {
         showToast(`✅ Confirmed! PNR: ${data.booking.pnr}`);
         const modal = document.getElementById('flightResultsModal');
