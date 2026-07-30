@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKYLINE X | Fly Beyond Expectations - Airline Reservation Platform</title>
+  <meta name="description" content="Book cheap flight tickets online with SKYLINE X. Get instant discounts, best price guarantee on domestic and international flights.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Toast Notification Alert -->
+  <div class="toast-notification" id="toastAlert">
+    <i class="fa-solid fa-circle-check" style="color:#34C759;"></i> <span id="toastMsg">Coupon Applied Successfully!</span>
+  </div>
+
+  <!-- MakeMyTrip Top Navigation Bar -->
+  <header class="mmt-navbar">
+    <div class="mmt-nav-container">
+      <a href="#" class="mmt-brand">
+        <div class="mmt-logo-badge"><i class="fa-solid fa-plane-up"></i></div>
+        <span>SKYLINE <span style="color:#00F0FF">X</span></span>
+      </a>
+
+      <!-- Category Navigation Tabs -->
+      <nav class="mmt-cat-tabs" id="categoryNavTabs">
+        <div class="mmt-cat-item active" data-cat="flights"><i class="fa-solid fa-plane"></i><span>Flights</span></div>
+        <div class="mmt-cat-item" data-cat="hotels"><i class="fa-solid fa-hotel"></i><span>Hotels</span></div>
+        <div class="mmt-cat-item" data-cat="homestays"><i class="fa-solid fa-house-chimney"></i><span>Homestays</span></div>
+        <div class="mmt-cat-item" data-cat="holidays"><i class="fa-solid fa-umbrella-beach"></i><span>Holidays</span></div>
+        <div class="mmt-cat-item" data-cat="trains"><i class="fa-solid fa-train"></i><span>Trains</span></div>
+        <div class="mmt-cat-item" data-cat="buses"><i class="fa-solid fa-bus"></i><span>Buses</span></div>
+        <div class="mmt-cat-item" data-cat="cabs"><i class="fa-solid fa-taxi"></i><span>Cabs</span></div>
+        <div class="mmt-cat-item" data-cat="forex"><i class="fa-solid fa-credit-card"></i><span>Forex</span></div>
+        <div class="mmt-cat-item" data-cat="insurance"><i class="fa-solid fa-shield-heart"></i><span>Insurance</span></div>
+      </nav>
+
+      <div class="mmt-user-actions">
+        <select id="currencySelect" style="background:#F2F5F8; padding:6px 12px; border-radius:20px; font-weight:700; cursor:pointer;">
+          <option value="INR">₹ INR</option>
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+          <option value="AED">AED</option>
+        </select>
+        <button class="btn-mmt-login" id="openAuthModal"><i class="fa-regular fa-user"></i> Login or Create Account</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sky Blue Background Header -->
+  <section class="mmt-hero-bg">
+    <h1 class="mmt-hero-title" id="heroBannerTitle">SKYLINE X — Fly Beyond Expectations</h1>
+    <p class="mmt-hero-sub" id="heroBannerSub">Fastest Booking • Lowest Airfares Guaranteed • AI Fare Predictions</p>
+  </section>
+
+  <!-- Iconic MMT White Floating Booking Card -->
+  <section class="mmt-booking-container">
+    <div class="mmt-white-card">
+      
+      <!-- 1. FLIGHTS FORM PANEL -->
+      <div class="category-panel active" id="panel-flights">
+        <!-- Trip Type Switcher -->
+        <div class="mmt-trip-type-row">
+          <div class="mmt-radio-group">
+            <label class="mmt-radio-label"><input type="radio" name="tripType" value="oneway" checked> One Way</label>
+            <label class="mmt-radio-label"><input type="radio" name="tripType" value="roundtrip"> Round Trip</label>
+            <label class="mmt-radio-label"><input type="radio" name="tripType" value="multicity"> Multi City</label>
+          </div>
+          <span style="font-size:0.85rem; font-weight:700; color:var(--mmt-sky-blue);">Book International & Domestic Flights</span>
+        </div>
+
+        <!-- Special Fares Bar -->
+        <div class="mmt-special-fares-bar">
+          <span style="font-size:0.8rem; font-weight:700; color:var(--text-dark-sub);">Select Special Fare:</span>
+          <button class="fare-chip active" data-fare="regular">Regular Fares</button>
+          <button class="fare-chip" data-fare="student">Student Fares (-15%)</button>
+          <button class="fare-chip" data-fare="senior">Senior Citizen Fares</button>
+          <button class="fare-chip" data-fare="armed">Armed Forces Fares</button>
+          <button class="fare-chip" data-fare="doctor">Doctor & Nurses Fares</button>
+        </div>
+
+        <!-- Flight Search Grid -->
+        <form id="mmtSearchForm" style="position:relative;">
+          <div class="mmt-swap-icon" id="mmtSwapBtn" title="Swap Airports"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+
+          <div class="mmt-search-grid">
+            <div class="mmt-input-box" id="fromBox">
+              <label><i class="fa-solid fa-plane-departure"></i> From</label>
+              <div class="mmt-big-code" id="fromBigCode">DEL</div>
+              <div class="mmt-sub-name" id="fromSubName">Delhi, Indira Gandhi Intl Airport</div>
+              <input type="hidden" id="originVal" value="Delhi (DEL)">
+              <div class="mmt-auto-dropdown" id="fromDropdown"></div>
+            </div>
+
+            <div class="mmt-input-box" id="toBox">
+              <label><i class="fa-solid fa-plane-arrival"></i> To</label>
+              <div class="mmt-big-code" id="toBigCode">BLR</div>
+              <div class="mmt-sub-name" id="toSubName">Bengaluru, Kempegowda Intl Airport</div>
+              <input type="hidden" id="destVal" value="Bengaluru (BLR)">
+              <div class="mmt-auto-dropdown" id="toDropdown"></div>
+            </div>
+
+            <div class="mmt-input-box" id="departBox">
+              <label><i class="fa-regular fa-calendar-days"></i> Departure</label>
+              <div class="mmt-big-code" id="departBigDate">24 Jul '26</div>
+              <div class="mmt-sub-name" id="departDayName">Friday</div>
+              <input type="date" id="departDateHidden" style="position:absolute; opacity:0; inset:0; cursor:pointer;">
+            </div>
+
+            <div class="mmt-input-box" id="returnBox">
+              <label><i class="fa-regular fa-calendar-check"></i> Return</label>
+              <div style="font-size:0.95rem; font-weight:700; color:var(--text-gray-muted);" id="returnBigDate">Tap to add return</div>
+              <div class="mmt-sub-name" id="returnSubName">Save extra on roundtrip</div>
+              <input type="date" id="returnDateHidden" style="position:absolute; opacity:0; inset:0; cursor:pointer;">
+            </div>
+
+            <div class="mmt-input-box" id="passengersBox" style="border-right:none;">
+              <label><i class="fa-solid fa-users"></i> Travellers & Class</label>
+              <div class="mmt-big-code" id="passCountDisplay">1 <span style="font-size:1rem; font-weight:700;">Traveller</span></div>
+              <div class="mmt-sub-name" id="cabinClassDisplay">Economy/Premium Economy</div>
+
+              <div class="mmt-passenger-picker" id="passengerPickerDropdown">
+                <div class="pass-row">
+                  <div><strong>Adults</strong><small style="display:block; color:#737373;">Age 12+</small></div>
+                  <div class="cnt-control">
+                    <button type="button" class="cnt-btn" data-action="dec" data-type="adults">-</button>
+                    <span id="cntAdults">1</span>
+                    <button type="button" class="cnt-btn" data-action="inc" data-type="adults">+</button>
+                  </div>
+                </div>
+                <div class="pass-row">
+                  <div><strong>Children</strong><small style="display:block; color:#737373;">Age 2-11</small></div>
+                  <div class="cnt-control">
+                    <button type="button" class="cnt-btn" data-action="dec" data-type="children">-</button>
+                    <span id="cntChildren">0</span>
+                    <button type="button" class="cnt-btn" data-action="inc" data-type="children">+</button>
+                  </div>
+                </div>
+
+                <div style="margin-top:10px;">
+                  <label style="font-size:0.75rem; font-weight:700; color:#737373;">CABIN CLASS</label>
+                  <select id="cabinSelect" style="width:100%; padding:6px; border:1px solid #DDD; border-radius:6px; margin-top:4px; font-weight:700;">
+                    <option value="Economy">Economy</option>
+                    <option value="Premium Economy">Premium Economy</option>
+                    <option value="Business">Business Class</option>
+                    <option value="First Suite">First Suite</option>
+                  </select>
+                </div>
+                <button type="button" class="btn-mmt-login full-width" id="applyPassBtn" style="margin-top:12px; border-radius:8px;">APPLY</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search" id="giantSearchBtn">SEARCH FLIGHTS <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 2. HOTELS FORM PANEL -->
+      <div class="category-panel" id="panel-hotels" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Book Hotels & Resorts Worldwide</h3>
+        <form id="hotelSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 1.5fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-building-user"></i> City, Property Name Or Location</label>
+              <div class="mmt-big-code">Goa</div>
+              <div class="mmt-sub-name">India • 2,450+ Properties</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-days"></i> Check-In</label>
+              <div class="mmt-big-code">26 Jul '26</div>
+              <div class="mmt-sub-name">Sunday</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-check"></i> Check-Out</label>
+              <div class="mmt-big-code">29 Jul '26</div>
+              <div class="mmt-sub-name">Wednesday (3 Nights)</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-bed"></i> Rooms & Guests</label>
+              <div class="mmt-big-code">1 Room</div>
+              <div class="mmt-sub-name">2 Guests • 0 Children</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH HOTELS <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 3. HOMESTAYS FORM PANEL -->
+      <div class="category-panel" id="panel-homestays" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Book Luxury Villas, Homestays & Cottages</h3>
+        <form id="homestaySearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 1.5fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-house"></i> Villa / Cottage Destination</label>
+              <div class="mmt-big-code">Manali</div>
+              <div class="mmt-sub-name">Himachal Pradesh • Alpine Chalets</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-days"></i> Check-In</label>
+              <div class="mmt-big-code">01 Aug '26</div>
+              <div class="mmt-sub-name">Saturday</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-check"></i> Check-Out</label>
+              <div class="mmt-big-code">05 Aug '26</div>
+              <div class="mmt-sub-name">Wednesday</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-users"></i> Guests & Property Type</label>
+              <div class="mmt-big-code">4 Guests</div>
+              <div class="mmt-sub-name">Entire Private Luxury Villa</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH HOMESTAYS <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 4. HOLIDAYS FORM PANEL -->
+      <div class="category-panel" id="panel-holidays" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Book All-Inclusive Holiday Tour Packages</h3>
+        <form id="holidaySearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 2fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-location-dot"></i> Departing From</label>
+              <div class="mmt-big-code">Delhi</div>
+              <div class="mmt-sub-name">All Flights & Transfers Included</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-umbrella-beach"></i> Going To Destination</label>
+              <div class="mmt-big-code">Maldives</div>
+              <div class="mmt-sub-name">Overwater Bungalow Resorts</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-regular fa-calendar"></i> Month Of Travel</label>
+              <div class="mmt-big-code">August '26</div>
+              <div class="mmt-sub-name">Honeymoon & Luxury Package</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH HOLIDAY PACKAGES <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 5. TRAINS FORM PANEL -->
+      <div class="category-panel" id="panel-trains" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">IRCTC Train Tickets & PNR Status Lookup</h3>
+        <form id="trainSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 2fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-train"></i> From Station</label>
+              <div class="mmt-big-code">NDLS</div>
+              <div class="mmt-sub-name">New Delhi Railway Station</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-train"></i> To Station</label>
+              <div class="mmt-big-code">MMCT</div>
+              <div class="mmt-sub-name">Mumbai Central Station</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-days"></i> Travel Date</label>
+              <div class="mmt-big-code">26 Jul '26</div>
+              <div class="mmt-sub-name">Sunday</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-couch"></i> Class</label>
+              <div class="mmt-big-code">3 AC</div>
+              <div class="mmt-sub-name">AC 3 Tier (Rajdhani Express)</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH TRAINS <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 6. BUSES FORM PANEL -->
+      <div class="category-panel" id="panel-buses" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Book Intercity Bus Tickets (Volvo & AC Sleeper)</h3>
+        <form id="busSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 2fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-bus"></i> From City</label>
+              <div class="mmt-big-code">Bangalore</div>
+              <div class="mmt-sub-name">KSRTC Main Boarding Point</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-bus"></i> To City</label>
+              <div class="mmt-big-code">Hyderabad</div>
+              <div class="mmt-sub-name">Miyapur / Ameerpet Drop</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-days"></i> Date</label>
+              <div class="mmt-big-code">25 Jul '26</div>
+              <div class="mmt-sub-name">Saturday</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-couch"></i> Bus Type</label>
+              <div class="mmt-big-code">Volvo AC</div>
+              <div class="mmt-sub-name">Multi-Axle AC Sleeper (2+1)</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH BUSES <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 7. CABS FORM PANEL -->
+      <div class="category-panel" id="panel-cabs" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Book Outstation Cabs & Airport Taxis</h3>
+        <form id="cabSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 2fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-location-dot"></i> Pickup Location</label>
+              <div class="mmt-big-code">Delhi Airport</div>
+              <div class="mmt-sub-name">Terminal 3 Pickup Zone</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-location-dot"></i> Drop Location</label>
+              <div class="mmt-big-code">Jaipur</div>
+              <div class="mmt-sub-name">City Center • 280 km Outstation</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-calendar-days"></i> Date & Time</label>
+              <div class="mmt-big-code">26 Jul '26</div>
+              <div class="mmt-sub-name">10:00 AM</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-car"></i> Cab Type</label>
+              <div class="mmt-big-code">Sedan</div>
+              <div class="mmt-sub-name">Dzire / Etios (AC Car)</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">SEARCH CABS <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 8. FOREX FORM PANEL -->
+      <div class="category-panel" id="panel-forex" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">Multi-Currency Forex Card & Currency Exchange</h3>
+        <form id="forexSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 2fr 2fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-money-bill-transfer"></i> Currency Needed</label>
+              <select id="forexCurrencySelect" style="width:100%; font-size:1.5rem; font-weight:800; border:none; background:transparent;">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="AED">AED (Dirham)</option>
+                <option value="THB">THB (Baht)</option>
+                <option value="JPY">JPY (Yen)</option>
+              </select>
+              <div class="mmt-sub-name">Zero Forex Mark-Up Fee</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-coins"></i> Foreign Amount</label>
+              <input type="number" id="forexAmountInput" value="1000" style="font-size:1.8rem; font-weight:800; border:none; background:transparent; width:100%;">
+              <div class="mmt-sub-name">Doorstep Delivery in 48 Hours</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-calculator"></i> Total INR Payable</label>
+              <div class="mmt-big-code" id="forexTotalINR" style="color:var(--mmt-sky-blue);">₹83,500</div>
+              <div class="mmt-sub-name" id="forexRateSub">1 USD = 83.50 INR</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">ORDER FOREX CARD <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 9. INSURANCE FORM PANEL -->
+      <div class="category-panel" id="panel-insurance" style="display:none;">
+        <h3 style="margin-bottom:16px; font-weight:800;">International & Domestic Travel Insurance</h3>
+        <form id="insuranceSearchForm">
+          <div class="mmt-search-grid" style="grid-template-columns: 2fr 1.5fr 1.5fr 1.8fr;">
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-globe"></i> Travel Region</label>
+              <select id="insRegionSelect" style="width:100%; font-size:1.4rem; font-weight:800; border:none; background:transparent;">
+                <option value="Asia">Asia (Excl. Japan)</option>
+                <option value="Europe">Schengen Europe</option>
+                <option value="USA">USA & Canada</option>
+                <option value="Worldwide">Worldwide Coverage</option>
+              </select>
+              <div class="mmt-sub-name">Includes Cashless Hospitalization</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-regular fa-clock"></i> Duration</label>
+              <div class="mmt-big-code">7 Days</div>
+              <div class="mmt-sub-name">$100,000 USD Medical Cover</div>
+            </div>
+            <div class="mmt-input-box">
+              <label><i class="fa-solid fa-users"></i> Travelers</label>
+              <div class="mmt-big-code">1 Adult</div>
+              <div class="mmt-sub-name">Age 18-50 Years</div>
+            </div>
+            <div class="mmt-input-box" style="border-right:none;">
+              <label><i class="fa-solid fa-shield"></i> Premium</label>
+              <div class="mmt-big-code" id="insPremiumDisplay" style="color:var(--mmt-sky-blue);">₹840</div>
+              <div class="mmt-sub-name">Zero Deductible Claims</div>
+            </div>
+          </div>
+          <div class="mmt-search-btn-wrapper">
+            <button type="submit" class="btn-mmt-giant-search">GET INSTANT POLICY <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MMT Offers & Promo Banners Carousel Section -->
+  <section class="mmt-offers-section">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="font-size:1.5rem; font-weight:800;">Offers & Discount Coupons</h2>
+      <a href="#" style="color:var(--mmt-sky-blue); font-weight:700; font-size:0.9rem;">VIEW ALL OFFERS <i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+
+    <div class="mmt-offers-grid">
+      <div class="offer-card" data-code="MMTBANK">
+        <div class="offer-badge"><i class="fa-solid fa-tags"></i></div>
+        <div class="offer-info">
+          <h4>FLAT 15% OFF on Domestic Flights</h4>
+          <p>Valid on ICICI Bank & HDFC Credit Cards</p>
+          <span class="offer-code">CODE: MMTBANK</span>
+        </div>
+      </div>
+
+      <div class="offer-card" data-code="FLYMMT">
+        <div class="offer-badge"><i class="fa-solid fa-plane"></i></div>
+        <div class="offer-info">
+          <h4>Zero Cancellation Charges</h4>
+          <p>Get 100% refund on instant flight cancellations</p>
+          <span class="offer-code">CODE: FLYMMT</span>
+        </div>
+      </div>
+
+      <div class="offer-card" data-code="MMTSTUDENT">
+        <div class="offer-badge"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="offer-info">
+          <h4>Student Special Fare</h4>
+          <p>Extra 10kg baggage + 15% instant discount</p>
+          <span class="offer-code">CODE: MMTSTUDENT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1000+ Travel Places Grid Section -->
+  <section class="mmt-offers-section" style="margin-top:50px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <h2 style="font-size:1.5rem; font-weight:800;">Explore 1,000+ Popular Flight Destinations</h2>
+        <p style="color:var(--text-gray-muted); font-size:0.9rem;">Search flights across top domestic & international cities</p>
+      </div>
+      <input type="text" id="destSearchExp" placeholder="Search cities or airports..." style="background:#FFFFFF; border:1px solid var(--border-light); padding:10px 18px; border-radius:20px; width:260px;">
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:20px;" id="destGrid">
+      <!-- Populated by script.js -->
+    </div>
+  </section>
+
+  <!-- Results Modal (Generic Results for Flights/Hotels/Trains/Cabs) -->
+  <div class="mmt-modal-overlay" id="flightResultsModal">
+    <div class="mmt-modal-card">
+      <div class="mmt-modal-header">
+        <div>
+          <h3 id="modalRouteHeader">Search Results</h3>
+          <small style="color:#00F0FF;" id="modalRouteSub">Live Availability</small>
+        </div>
+        <button id="closeResultsModal" style="background:none; color:#FFF; font-size:1.4rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding:20px; overflow-y:auto;" id="flightResultsList">
+        <!-- Rendered by script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Seat Picker Modal -->
+  <div class="mmt-modal-overlay" id="seatPickerModal">
+    <div class="mmt-modal-card" style="max-width:900px;">
+      <div class="mmt-modal-header">
+        <h3>Select Aircraft Seat • Flight SKX-804</h3>
+        <button id="closeSeatModal" style="background:none; color:#FFF; font-size:1.4rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding:24px; display:grid; grid-template-columns:2fr 1fr; gap:20px;">
+        <div style="background:#F2F5F8; padding:20px; border-radius:14px; text-align:center;">
+          <h4 style="margin-bottom:14px;">Cabin Seat Layout</h4>
+          <div id="seatMapGrid" style="display:flex; flex-direction:column; gap:10px; align-items:center;"></div>
+        </div>
+
+        <div style="background:#0A1424; color:#FFF; padding:20px; border-radius:14px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h4>Booking Summary</h4>
+            <div style="margin-top:16px;">
+              <small style="color:#00F0FF;">Selected Seat:</small>
+              <h2 id="sumSeatNo">Select seat...</h2>
+              <hr style="border-color:rgba(255,255,255,0.1); margin:12px 0;">
+              <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.2rem;">
+                <span>Total Fare:</span>
+                <span style="color:#00F0FF;" id="sumFare">₹7,933</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-mmt-giant-search" id="confirmPassBtn" style="font-size:1rem; padding:12px; width:100%;">Confirm & Get Ticket</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Digital Boarding Pass Modal -->
+  <div class="mmt-modal-overlay" id="boardingPassModal">
+    <div class="mmt-modal-card" style="max-width:750px;">
+      <div style="padding:16px; text-align:right;">
+        <button id="closePassModal" style="background:none; font-size:1.4rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding:0 24px 24px 24px;">
+        <div class="mmt-boarding-pass">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; margin-bottom:16px;">
+            <h3 style="color:#00F0FF;"><i class="fa-solid fa-plane-up"></i> SKYLINE X • Official Boarding Pass</h3>
+            <span style="background:#34C759; color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">CONFIRMED</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:2fr 1fr; gap:20px;">
+            <div>
+              <small style="color:#94A3B8;">PASSENGER NAME</small>
+              <h3 style="color:#00F0FF;">ALEXANDER VANCE</h3>
+
+              <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; margin:14px 0;">
+                <div><h2 id="bpFrom">DEL</h2><small>DELHI</small></div>
+                <div style="text-align:center;"><i class="fa-solid fa-plane" style="color:#00F0FF;"></i><br><small>2h 45m</small></div>
+                <div style="text-align:right;"><h2 id="bpTo">BLR</h2><small>BENGALURU</small></div>
+              </div>
+
+              <div style="display:flex; gap:20px;">
+                <div><small style="color:#94A3B8;">FLIGHT</small><br><strong>SKX-804</strong></div>
+                <div><small style="color:#94A3B8;">SEAT</small><br><strong style="background:#00F0FF; color:#000; padding:2px 6px; border-radius:4px;" id="bpSeatNo">01B</strong></div>
+              </div>
+            </div>
+
+            <div style="border-left:2px dashed rgba(255,255,255,0.2); padding-left:16px; text-align:center;">
+              <div style="width:100px; height:100px; background:#FFF; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:3rem; color:#000; margin:0 auto;"><i class="fa-solid fa-qrcode"></i></div>
+              <small style="font-family:monospace; display:block; margin-top:8px;" id="bpPnrDisplay">PNR: MMT98421</small>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; text-align:right;">
+          <button class="btn-mmt-giant-search" onclick="window.print()" style="font-size:0.95rem; padding:10px 24px;">Print Boarding Pass</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign In / User Auth Modal -->
+  <div class="mmt-modal-overlay" id="authModal">
+    <div class="mmt-modal-card" style="max-width:420px; padding:28px;">
+      <div style="text-align:right;">
+        <button id="closeAuthModal" style="background:none; font-size:1.4rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div style="text-align:center; margin-bottom:20px;">
+        <div class="mmt-logo-badge" style="margin:0 auto 10px auto;"><i class="fa-solid fa-plane-up"></i></div>
+        <h3>Login to SKYLINE X</h3>
+        <small style="color:#737373;">Access saved bookings, SkyMiles & instant refunds</small>
+      </div>
+
+      <form id="loginSubmitForm">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem; font-weight:700; color:#737373;">MOBILE / EMAIL ID</label>
+          <input type="text" placeholder="Enter Mobile Number or Email" value="vance@skylinex.com" required style="width:100%; border:1px solid #DDD; padding:10px; border-radius:8px; margin-top:4px;">
+        </div>
+        <button type="submit" class="btn-mmt-giant-search full-width" style="font-size:1rem; padding:10px;">CONTINUE</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="destinations_data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
