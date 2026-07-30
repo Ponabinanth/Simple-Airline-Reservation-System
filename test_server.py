@@ -44,3 +44,33 @@ def test_search_trains():
     data = response.json()
     assert data["status"] == "SUCCESS"
     assert "trains" in data
+
+def test_booking_flow():
+    # 1. Get all bookings
+    res = client.get("/api/bookings")
+    assert res.status_code == 200
+    initial_count = len(res.json()["bookings"])
+
+    # 2. Create a booking
+    payload = {
+        "service_type": "hotel",
+        "item_name": "Taj Mahal Palace",
+        "total_fare": 15000,
+        "details": {}
+    }
+    res = client.post("/api/book-service", json=payload)
+    assert res.status_code == 200
+    pnr = res.json()["booking"]["pnr"]
+    assert pnr.startswith("MMTHOT")
+
+    # 3. Verify booking added
+    res = client.get("/api/bookings")
+    assert len(res.json()["bookings"]) == initial_count + 1
+
+    # 4. Cancel booking
+    res = client.delete(f"/api/bookings/{pnr}")
+    assert res.status_code == 200
+
+    # 5. Verify booking removed
+    res = client.get("/api/bookings")
+    assert len(res.json()["bookings"]) == initial_count
